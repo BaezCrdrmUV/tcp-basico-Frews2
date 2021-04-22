@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace tcp_com
 {
@@ -28,7 +29,7 @@ namespace tcp_com
         {
             if(listener != null && acceptFlag == true)
             {
-                while(true)
+                while(acceptFlag== true)
                 {
                     Console.WriteLine("Esperando conexión del cliente...");
                     // Empieza a escuchar
@@ -51,10 +52,13 @@ namespace tcp_com
                             client.Receive(buffer);
 
                             msg = Encoding.UTF8.GetString(buffer);
-                            Console.WriteLine(msg);
+                            Message newMessage = JsonConvert.DeserializeObject<Message>(msg);
+                            Console.WriteLine(newMessage.User + ": " + newMessage.MessageString + "\t Mandado - " + newMessage.CreationTime.ToString("HH:mm"));
+                            msg = newMessage.MessageString;
                         }
                         Console.WriteLine("Cerrando conexión");
                         client.Dispose();
+                        acceptFlag = false;
                     }
                 }
             }

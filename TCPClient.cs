@@ -31,13 +31,18 @@ namespace tcp_com
         {
             client.Connect(IP, Port);   
             Console.WriteLine("Conectado");
+            Console.WriteLine("Ingrese su nombre de usuario");
+            string user = Console.ReadLine();
+            Console.WriteLine("Ingrese su mensaje");
+            string msg = "";
 
-            while(true)
+            while(!msg.StartsWith("bye"))
             {
                 try
                 {
-                    string msg = Console.ReadLine();
-                    Message newMessage = new Message(msg, Username);
+
+                    msg = Console.ReadLine();
+                    Message newMessage = new Message(msg, user);
                     string jsonMessage = JsonConvert.SerializeObject(newMessage);
 
                     // Envío de datos
@@ -57,6 +62,7 @@ namespace tcp_com
                     Console.WriteLine("Error {0}", ex.Message);
                 }
             }
+            Console.WriteLine("Cerrando cliente...");
         }
     }
 }
